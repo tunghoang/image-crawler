@@ -1,0 +1,24 @@
+{
+  "name": "imagecrawler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cheerio": "^1.0.0-rc.2",
+    "config": "^3.0.1",
+    "kue": "^0.11.6",
+    "puppeteer": "^1.11.0",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "NODE_ENV=production node index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -8,7 +8,7 @@ const run = async () => {
     const browser = await puppeteer.launch({
         headless: false,
         devtools: true
-    });
+    })
     const page = await browser.newPage();
 
     const navigationPromise = page.waitForNavigation();
@@ -64,7 +64,7 @@ const run = async () => {
 
                 let options = await {
                     url: srcImage,
-                    dest: `/home/sidz/lab/image-crawler/image/${fileName}`
+                    dest: `./image/${fileName}`
                 }
 
                 await download.image(options)
@@ -78,7 +78,7 @@ const run = async () => {
                  } else {
                 const fileName = await imageName + `${imageRowNth}-${imageNth}`;
                 base64Img.img(srcImage,
-                    '/home/sidz/lab/image-crawler/image',
+                    './image',
                     fileName,
                     (err, filePath) => {
                         console.error(err);

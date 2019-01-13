@@ -4,10 +4,10 @@ const config = require("config");
 const redis = config.get("redis");
 const queue = kue.createQueue({ redis });
 
-function createDownloadJob(link, path) {
+function createDownloadJob(link, keyword) {
     queue.create("download-image", {
         link,
-        path
+        keyword
     })
         .priority("medium")
         .ttl(10000)

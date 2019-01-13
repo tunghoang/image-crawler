@@ -1,14 +1,16 @@
 const rp = require("request-promise");
 const puppeteer = require("puppeteer");
-const fs = require("fs");
 const cheerio = require("cheerio");
+const md5 = require("md5");
 
 const jobAPI = require("../../jobs/crawl-image");
-const serviceAPI = require("../../services/sellpro-proxy");
+const db = require("../../database");
+
+const Image = db.Image;
 
 async function downloadImage(job, done) {
     try {
-        const { link, path } = job.data;
+        const { link, keyword } = job.data;
 
         const data = await rp({
             uri: link,
@@ -16,8 +18,12 @@ async function downloadImage(job, done) {
             encoding: null
         })
 
-        const buffer = Buffer.from(data);
-        fs.writeFileSync(path + encodeURIComponent(link), buffer);
+        const hash = md5(data);
+        await Image.create({
+            hash,
+            link,
+            word: keyword
+        })
 
         done();
     }
@@ -33,7 +39,7 @@ async function crawlImage(job, done) {
         let links = await extractLinks(html);
 
         for (link of links) {
-            await jobAPI.createDownloadJob(link, "images/");
+            await jobAPI.createDownloadJob(link, job.data.word);
         }
 
     } catch (err) {
@@ -49,7 +55,7 @@ async function renderPage(word) {
     // console.log(response);
     // const proxyUrl = `${response.data.ip}:${response.data.port}`
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         ignoreHTTPSErrors: true,
         defaultViewport: {
             width: 1200,
@@ -70,7 +76,7 @@ async function renderPage(word) {
         })
 
         await page.goto("https://google.com", {
-            waitUntil: 'networkidle0'
+            waitUntil: 'domcontentloaded'
         });
 
         await click(page, "input.glFyf.gsfi, input[name='q']");
@@ -82,7 +88,7 @@ async function renderPage(word) {
         await page.keyboard.press("Enter");
 
         await page.waitForNavigation({
-            waitUntil: 'networkidle0'
+            waitUntil: 'domcontentloaded'
         })
 
         await clickNav(page, "a.q.qs");

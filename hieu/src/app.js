@@ -13,7 +13,7 @@ app.use("/api/v1", routes);
 
 
 try {
-    db.sequelize.sync({force: true})
+    db.sequelize.sync()
         .then(() => {
             app.listen(PORT, () => {
                 console.log("Server is listening on port " + PORT);

@@ -65,6 +65,7 @@ async function getStatistics(req, res) {
             });
         } else {
             data = await Keyword.findAll({
+                group: 'word',
                 attributes: ['word', [db.sequelize.fn('COUNT', 'images'), 'imagesCount']],
                 raw: true,
                 include: [

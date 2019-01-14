@@ -8,6 +8,6 @@ const queue = kue.createQueue({redis});
 
 queue.setMaxListeners(100);
 
-queue.process("download-image", 10, controller.downloadImage);
+queue.process("download-image", 4, controller.downloadImage);
 
-queue.process("crawl-images", 2, controller.crawlImage);
+queue.process("crawl-images", 5, controller.crawlImage);
